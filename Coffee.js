@@ -95,6 +95,15 @@ function addToPathArray(nextCellId) {
   }
 }
 
+// var checkIfCoffee = function() {
+//     if (cellArray[pathArray[pathArray.length - 1]].cellType === coffee) {
+//       return pathArray.length - 1;
+//   }
+//   else {
+//     return "boo"
+//   }
+// }
+
 function DistanceToCoffee(numRows, numColumns, deskLocation, coffeeLocations, wallLocations) {
   //Calls function to create an array of Cell objects
   createObjects(numRows, numColumns);
@@ -122,7 +131,16 @@ function DistanceToCoffee(numRows, numColumns, deskLocation, coffeeLocations, wa
   moveRight(pathArray[1], numRows,numColumns)
   moveRight(pathArray[2], numRows,numColumns)
 
-  return pathArray;
+
+///////NOT WORKING//////
+  for (var i = 0; i < pathArray.length; i++) {
+    if (cellArray[pathArray[i]].cellType === coffee) {
+      return pathArray.length - 1;
+    }
+    else {
+      return "boo"
+    }
+  }
 }
 
 DistanceToCoffee(3, 4, [2,1], [[1,3],[3,2]], [[2,2],[2,3],[3,1]]);
