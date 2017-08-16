@@ -40,47 +40,123 @@ var computeId = function(numRows, numColumns, currentRow, currentColumn) {
   return id;
 }
 
-var moveUp = function(id, numRows, numColumns) {
+// var moveUp = function(id, numRows, numColumns) {
+//   //variable to hold the id of the cell that will be moved up to
+//   var nextCellId;
+//   //checks to make sure you are not on the top row
+//   //and assigns the nextCellId to the cell directly above the current one
+//   if (id > numRows) {
+//     nextCellId = id - numColumns;
+//   }
+//   addToPathArray(nextCellId);
+// }
+//
+// var moveDown = function(id, numRows, numColumns) {
+//   var nextCellId;
+//   //checks to make sure you are not on the bottom row
+//   //and assigns the nextCellId to the cell directly below the current one
+//   if (id <= (numRows * numColumns) - numColumns) {
+//     nextCellId = id + numColumns;
+//   }
+//     addToPathArray(nextCellId);
+// }
+//
+// var moveLeft = function(id, numRows, numColumns) {
+//   var nextCellId;
+//
+//   //checks to make sure you are not on the left-most column
+//   //and assigns the nextCellId to the cell left of the current one
+//   if (id % numColumns !== 1) {
+//     nextCellId = id - 1;
+//   }
+//   addToPathArray(nextCellId);
+// }
+//
+// var moveRight = function(id, numRows, numColumns) {
+//   var nextCellId;
+//
+//   //checks to make sure you are not on the right-most column
+//   //and assigns the nextCellId to the cell right of the current one
+//   if (id % numColumns !== 0) {
+//     nextCellId = id + 1;
+//   }
+//   addToPathArray(nextCellId);
+// }
+//
+// //finds the object in the cellArray that contains this id
+// //and pushes it into the path array if the type is not a wall
+// //Sets current location to this
+// function addToPathArray(nextCellId) {
+//   for (var i = 0; i < cellArray.length; i++) {
+//     if (cellArray[i].cellId == nextCellId && cellArray[i].cellType !== wall) {
+//       pathArray.push(nextCellId);
+//       currentLocation = cellArray[i];
+//     }
+//   }
+// }
+
+
+Cell.prototype.northNeighbor = function(id, numRows, numColumns) {
   //variable to hold the id of the cell that will be moved up to
-  var nextCellId;
+  var northCellId;
   //checks to make sure you are not on the top row
   //and assigns the nextCellId to the cell directly above the current one
   if (id > numRows) {
-    nextCellId = id - numColumns;
+    northCellId = id - numColumns;
   }
-  addToPathArray(nextCellId);
+  for (var i = 0; i < cellArray.length; i++) {
+    if (cellArray[i].cellId == northCellId && cellArray[i].cellType !== wall) {
+      return northCellId;
+    }
+  }
+  // return -1;
 }
 
-var moveDown = function(id, numRows, numColumns) {
-  var nextCellId;
+Cell.prototype.southNeighbor = function(id, numRows, numColumns) {
+  var southCellId;
   //checks to make sure you are not on the bottom row
   //and assigns the nextCellId to the cell directly below the current one
   if (id <= (numRows * numColumns) - numColumns) {
-    nextCellId = id + numColumns;
+    southCellId = id + numColumns;
   }
-    addToPathArray(nextCellId);
+  for (var i = 0; i < cellArray.length; i++) {
+    if (cellArray[i].cellId == southCellId && cellArray[i].cellType !== wall) {
+      return southCellId;
+    }
+  }
+  // return -1;
 }
 
-var moveLeft = function(id, numRows, numColumns) {
-  var nextCellId;
+Cell.prototype.westNeighbor = function(id, numRows, numColumns) {
+  var westCellId;
 
   //checks to make sure you are not on the left-most column
   //and assigns the nextCellId to the cell left of the current one
   if (id % numColumns !== 1) {
-    nextCellId = id - 1;
+    westCellId = id - 1;
   }
-  addToPathArray(nextCellId);
+  for (var i = 0; i < cellArray.length; i++) {
+    if (cellArray[i].cellId == westCellId && cellArray[i].cellType !== wall) {
+      return westCellId;
+    }
+  }
+  // return -1;
 }
 
-var moveRight = function(id, numRows, numColumns) {
-  var nextCellId;
+Cell.prototype.eastNeighbor = function(id, numRows, numColumns) {
+  var eastCellId;
 
   //checks to make sure you are not on the right-most column
   //and assigns the nextCellId to the cell right of the current one
   if (id % numColumns !== 0) {
-    nextCellId = id + 1;
+    eastCellId = id + 1;
   }
-  addToPathArray(nextCellId);
+  for (var i = 0; i < cellArray.length; i++) {
+    if (cellArray[i].cellId == eastCellId && cellArray[i].cellType !== wall) {
+      return eastCellId;
+    }
+  }
+  // return -1;
 }
 
 //finds the object in the cellArray that contains this id
@@ -95,14 +171,37 @@ function addToPathArray(nextCellId) {
   }
 }
 
-// var checkIfCoffee = function() {
-//     if (cellArray[pathArray[pathArray.length - 1]].cellType === coffee) {
-//       return pathArray.length - 1;
-//   }
-//   else {
-//     return "boo"
-//   }
-// }
+var findPassableNeighbors = function (deskLocation, numRows, numColumns) {
+  var moveToNeighbors = [];
+
+  deskLocationId = computeId(numRows, numColumns, deskLocation[0], deskLocation[1])
+  var north = cellArray[deskLocationId].northNeighbor(deskLocationId, numRows, numColumns);
+  var south = cellArray[deskLocationId].southNeighbor(deskLocationId, numRows, numColumns);
+  var east = cellArray[deskLocationId].eastNeighbor(deskLocationId, numRows, numColumns);
+  var west = cellArray[deskLocationId].westNeighbor(deskLocationId, numRows, numColumns);
+
+  if (north != undefined) {
+    moveToNeighbors.push(north)
+  }
+
+  if (south != undefined) {
+    moveToNeighbors.push(south)
+
+  }
+
+  if (east != undefined) {
+    moveToNeighbors.push(east)
+
+  }
+
+  if (west != undefined) {
+    moveToNeighbors.push(west)
+
+  }
+
+
+  return moveToNeighbors;
+}
 
 function DistanceToCoffee(numRows, numColumns, deskLocation, coffeeLocations, wallLocations) {
   //Calls function to create an array of Cell objects
@@ -131,16 +230,7 @@ function DistanceToCoffee(numRows, numColumns, deskLocation, coffeeLocations, wa
   moveRight(pathArray[1], numRows,numColumns)
   moveRight(pathArray[2], numRows,numColumns)
 
-
-///////NOT WORKING//////
-  for (var i = 0; i < pathArray.length; i++) {
-    if (cellArray[pathArray[i]].cellType === coffee) {
-      return pathArray.length - 1;
-    }
-    else {
-      return "boo"
-    }
-  }
+  return pathArray.length - 1;
 }
 
 DistanceToCoffee(3, 4, [2,1], [[1,3],[3,2]], [[2,2],[2,3],[3,1]]);
