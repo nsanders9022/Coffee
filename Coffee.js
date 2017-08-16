@@ -124,12 +124,11 @@ var findPassableNeighbors = function (deskLocation, numRows, numColumns) {
   return moveToNeighbors;
 }
 
-// Cell.prototype.isCoffee = function() {
-//   if (this.cellType = coffee) {
-//     return true;
-//   }
-//   return false;
-// }
+
+//create recursive(?) function to find path using the findPassableNeighbors function (and future functions)
+
+
+
 
 //main function
 //Calculates number of steps to the coffee machine and calls upon other functions inside it
