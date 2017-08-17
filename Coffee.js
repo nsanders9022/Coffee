@@ -80,22 +80,37 @@ var solve = function(id, numRows, numColumns) {
       return true;
     }
   }
-
   return false;
-
-
 }
 
-
-//main function
-//Calculates number of steps to the coffee machine and calls upon other functions inside it
+//Instantiates the array of cell Objects based on arguments
+//Calculates number of steps to the coffee machine
 function DistanceToCoffee(numRows, numColumns, deskLocation, coffeeLocations, wallLocations) {
+
+  //User input error handling
+  //Returns -1 if user enters a coffee machine, wall, or desklocation coordinate outside the bounds of the rows and columns
+  var arrayList = [coffeeLocations, wallLocations];
+  for (var i = 0; i < arrayList.length; i++) {
+    for (var j = 0; j < arrayList[i].length; j++) {
+      if (arrayList[i][j][0] > numRows || arrayList[i][j][0] < 1) {
+        return -1;
+      }
+      if (arrayList[i][j][1] > numColumns || arrayList[i][j][1] < 1) {
+        return -1;
+      }
+    }
+  }
+  if (deskLocation[0] > numRows || deskLocation[0] < 1) {
+    return -1;
+  }
+  if (deskLocation[1] > numColumns || deskLocation[1] < 1) {
+    return -1;
+  }
+
+
   //Calls function to create an array of Cell objects
   createObjects(numRows, numColumns);
   id = computeId(numRows, numColumns, deskLocation[0], deskLocation[1]);
-
-  //Adds given desk location as the first item in the pathArray
-  // pathArray.push(computeId(numRows, numColumns, currentLocation[0], currentLocation[1]));
 
   //Changes cellType of cell object to 'coffee' if it is in the coffeeLocations array
   //and changes cellType of cell object to 'wall' if it is in the wallLocations array
@@ -119,7 +134,7 @@ function DistanceToCoffee(numRows, numColumns, deskLocation, coffeeLocations, wa
 }
 
 //Function called with arguments from the example passed in to the parameters
- DistanceToCoffee(3, 4, [2,1], [[1,3],[3,2]], [[2,2],[2,3],[3,1]]);
+ // DistanceToCoffee(3, 4, [2,1], [[1,3],[3,2]], [[2,2],[2,3],[3,1]]);
 
 
 ///Future things to implement
