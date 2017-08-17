@@ -17,7 +17,7 @@ function Cell (row, column, id, type) {
   this.cellType = type;
 }
 
-//Function to create new Cell objects
+//Function to dynamically create new Cell objects
 var createObjects = function(rowNum, colNum) {
   for (var i = 1; i <= rowNum * colNum; i++) {
     //calculates the row the object is in
@@ -85,21 +85,25 @@ var solve = function(id, numRows, numColumns) {
 
 //Instantiates the array of cell Objects based on arguments
 //Calculates number of steps to the coffee machine
+//Error handles user input
 function DistanceToCoffee(numRows, numColumns, deskLocation, coffeeLocations, wallLocations) {
 
-  //User input error handling
+  //USER INPUT ERROR HANDLING
   //Returns -1 if user enters a coffee machine, wall, or desklocation coordinate outside the bounds of the rows and columns
   var arrayList = [coffeeLocations, wallLocations];
-  for (var i = 0; i < arrayList.length; i++) {
+  for (var i = 0; i < arrayList.length; i++) { //for both the wall/coffee location arrays
     for (var j = 0; j < arrayList[i].length; j++) {
+      //if x coordinate is greater than or less than the number of rows return -1
       if (arrayList[i][j][0] > numRows || arrayList[i][j][0] < 1) {
         return -1;
       }
+      //if y coordinate is greater than or less than the number of columns return -1
       if (arrayList[i][j][1] > numColumns || arrayList[i][j][1] < 1) {
         return -1;
       }
     }
   }
+  //checks x and y coordinate for bounds of desk location
   if (deskLocation[0] > numRows || deskLocation[0] < 1) {
     return -1;
   }
@@ -107,10 +111,23 @@ function DistanceToCoffee(numRows, numColumns, deskLocation, coffeeLocations, wa
     return -1;
   }
 
+  //Returns -1 if a cell is inputted as more than one type (eg in the coffee and the wall array)
+  for (var i = 0; i < coffeeLocations.length; i++) {
+    for (var j  = 0; j < wallLocations.length; j++) {
+      if ((coffeeLocations[i][0] === wallLocations[j][0] && coffeeLocations[i][1] === wallLocations[j][1])) {
+        return -1;
+      }
+      if ((coffeeLocations[i][0] === deskLocation[0] && coffeeLocations[i][1] === deskLocation[1])) {
+        return -1;
+      }
+      if ((wallLocations[j][0] === deskLocation[0] && wallLocations[j][1] === deskLocation[1])) {
+        return -1;
+      }
+    }
+  }
 
-  //Calls function to create an array of Cell objects
+  //Calls function to instantiate an array of Cell objects
   createObjects(numRows, numColumns);
-  id = computeId(numRows, numColumns, deskLocation[0], deskLocation[1]);
 
   //Changes cellType of cell object to 'coffee' if it is in the coffeeLocations array
   //and changes cellType of cell object to 'wall' if it is in the wallLocations array
@@ -127,18 +144,12 @@ function DistanceToCoffee(numRows, numColumns, deskLocation, coffeeLocations, wa
     }
   }
 
-  //returns number of steps here
+  //calculates the id of the cell located at the deskLocation coordinates
+  id = computeId(numRows, numColumns, deskLocation[0], deskLocation[1]);
+  //returns number of steps if the coffe machine is found
   if (solve(id, numRows, numColumns)) {
     return pathArray.length;
   }
 }
 
-//Function called with arguments from the example passed in to the parameters
  // DistanceToCoffee(3, 4, [2,1], [[1,3],[3,2]], [[2,2],[2,3],[3,1]]);
-
-
-///Future things to implement
-// * user input error handling
-//      * coordinates in the wall and coffee arrays are in the bounds of the number of rows and columns
-//      * a cell is not listed in both the coffee array and the wall array, only one type is allowed
-// * find closest machine
