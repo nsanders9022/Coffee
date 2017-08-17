@@ -1,4 +1,4 @@
-//global variables
+//Global variables
 var cellArray = [];
 var base;
 var desk = "desk";
@@ -9,7 +9,7 @@ var currentLocation = [];
 var pathArray = []
 var previousCells = [];
 
-//Object constructor for Cell objects
+//Constructor for Cell objects
 function Cell (row, column, id, type) {
   this.cellRow = row;
   this.cellColumn = column;
@@ -36,24 +36,29 @@ var createObjects = function(rowNum, colNum) {
   }
 }
 
-//Gets the id value of a cell based on its row and column location
+//Gets the Id value of a cell based on its row and column location
 var computeId = function(numRows, numColumns, currentRow, currentColumn) {
   var id = (numColumns * currentRow) - (numColumns - currentColumn);
   return id;
 }
 
+//Recursive function to create an array of cells in the path to the coffee machine
 var solve = function(id, numRows, numColumns) {
   // returns true if current location is a coffee machine
   if (cellArray[id - 1].cellType === coffee) {
     return true;
   }
+  //returns false if the cell is a wall of has been tried before
   if (cellArray[id - 1].cellType === wall || previousCells.includes(id)) {
     return false;
   }
+
+  //adds current cell to the arrray
   previousCells.push(id);
 
   //if not on left edge
   if (id % numColumns !== 1) {
+    //Calls function again
     if (solve(id-1, numRows, numColumns)) {
       pathArray.push(id);
       return true;
@@ -80,6 +85,7 @@ var solve = function(id, numRows, numColumns) {
       return true;
     }
   }
+  //If no path is possible
   return false;
 }
 
@@ -144,7 +150,7 @@ function DistanceToCoffee(numRows, numColumns, deskLocation, coffeeLocations, wa
     }
   }
 
-  //calculates the id of the cell located at the deskLocation coordinates
+  //calculates the Id of the cell located at the deskLocation coordinates
   id = computeId(numRows, numColumns, deskLocation[0], deskLocation[1]);
   //returns number of steps if the coffe machine is found
   if (solve(id, numRows, numColumns)) {
